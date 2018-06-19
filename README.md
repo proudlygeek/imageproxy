@@ -1,4 +1,8 @@
-# imageproxy [![Build Status](https://travis-ci.org/willnorris/imageproxy.svg?branch=master)](https://travis-ci.org/willnorris/imageproxy) [![GoDoc](https://godoc.org/willnorris.com/go/imageproxy?status.svg)](https://godoc.org/willnorris.com/go/imageproxy) [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat)](LICENSE)
+# imageproxy
+
+[![GoDoc](https://godoc.org/willnorris.com/go/imageproxy?status.svg)](https://godoc.org/willnorris.com/go/imageproxy)
+[![Build Status](https://travis-ci.org/willnorris/imageproxy.svg?branch=master)](https://travis-ci.org/willnorris/imageproxy)
+[![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat)](LICENSE)
 
 imageproxy is a caching image proxy server written in go.  It features:
 
@@ -111,10 +115,12 @@ enabled using the `-cache` flag.  It supports the following values:
    are documented in the [aws-sdk-go session
    package](https://docs.aws.amazon.com/sdk-for-go/api/aws/session/)).
  - gcs URL (e.g. `gcs://bucket-name/optional-path-prefix`) - will cache images
-   on Google Cloud Storage.  This requires `GCP_PRIVATE_KEY` environmental
-   variable be set.
+   on Google Cloud Storage. Authentication is documented in Google's
+   [Application Default Credentials
+   docs](https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application).
  - azure URL (e.g. `azure://container-name/`) - will cache images on
    Azure Storage.  This requires `AZURESTORAGE_ACCOUNT_NAME` and
+   `AZURESTORAGE_ACCESS_KEY` environment variables to bet set.
  - redis URL (e.g. `redis://hostname/`) - will cache images on
    the specified redis host. The full URL syntax is defined by the [redis URI
    registration](https://www.iana.org/assignments/uri-schemes/prov/redis).
