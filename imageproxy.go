@@ -14,7 +14,7 @@
 
 // Package imageproxy provides an image proxy server.  For typical use of
 // creating and using a Proxy, see cmd/imageproxy/main.go.
-package imageproxy // import "willnorris.com/go/imageproxy"
+package imageproxy //// import "willnorris.com/go/imageproxy"
 
 import (
 	"bufio"
@@ -26,6 +26,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -192,6 +193,10 @@ func copyHeader(dst, src http.Header, keys ...string) {
 // referrer, host, and signature.  It returns an error if the request is not
 // allowed.
 func (p *Proxy) allowed(r *Request) error {
+	if net.ParseIP(r.URL.Hostname()).IsLinkLocalUnicast() {
+		return fmt.Errorf("request local unicast address (169.254.0.0) is not allowed : %v", r)
+	}
+
 	if len(p.Referrers) > 0 && !validReferrer(p.Referrers, r.Original) {
 		return fmt.Errorf("request does not contain an allowed referrer: %v", r)
 	}
@@ -330,8 +335,8 @@ func (t *TransformingTransport) RoundTrip(req *http.Request) (*http.Response, er
 
 	img, err := Transform(b, opt)
 	if err != nil {
-		log.Printf("error transforming image %s: %v", u.String(), err)
-		img = b
+		// probably not an image we will not proxy it
+		return nil, fmt.Errorf("error transforming image %s: %v", u.String(), err)
 	}
 
 	// replay response with transformed image and updated content length

@@ -139,6 +139,11 @@ func TestAllowed(t *testing.T) {
 		{"http://good/image", emptyOptions, whitelist, nil, key, nil, true},
 		{"http://bad/image", Options{Signature: "gWivrPhXBbsYEwpmWAKjbJEiAEgZwbXbltg95O2tgNI="}, nil, nil, key, nil, true},
 		{"http://bad/image", emptyOptions, whitelist, nil, key, nil, false},
+
+		// localUniCast disallow
+		{"http:///169.254.169.254", emptyOptions, whitelist, nil, key, nil, false},    //bad
+		{"http:///169.254.169.254:80", emptyOptions, whitelist, nil, key, nil, false}, //bad
+
 	}
 
 	for _, tt := range tests {
